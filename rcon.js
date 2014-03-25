@@ -190,26 +190,32 @@ RCONSocket.prototype._router = function(msg, rinfo) {
 				this.emit("error", new Error("SVRC_UPDATE response while not connected."));
 				return;
 			}
-			
+
 			// Updates have their own subtype
 			var updateType = decoded.readUInt8(1);
 			switch (updateType) {
 				case proto.SVRCU_PLAYERDATA:
-				console.log('players');
-				this.emit("players");
-				break;
+					var index = 3;
+					var players = [];
+					var playercount = decoded.readUInt8(2);
+					for (var i = 0;i < playercount;i++) {
+						var name = readString(decoded, index, 'ascii');
+						players.push(name);
+						index += 1 + name.length;
+					}
+					this.emit("players", players);
+					break;
 				case proto.SVRCU_ADMINCOUNT:
-				console.log('admins');
-				this.emit("admins");
-				break;
+					var admins = decoded.readUInt8(2);
+					this.emit("admins", admins);
+					break;
 				case proto.SVRCU_MAP:
-				var map = readString(decoded, 2, 'ascii');
-				console.log(map);
-				this.emit("map");
-				break;
+					var map = readString(decoded, 2, 'ascii');
+					this.emit("map", map);
+					break;
 				default:
-				this.emit("error", new Error("Unrecognized update."));
-				break;
+					this.emit("error", new Error("Unrecognized update."));
+					break;
 			}
 			break;
 		default:
