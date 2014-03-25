@@ -1,0 +1,15 @@
+{
+	"name": "zanproto",
+	"version": "0.0.1",
+	"author": "Alex Mayfield <alexmax2742@gmail.com>",
+	"description": "An abstraction over the Zandronum protocol",
+	"dependencies": {
+		"buffertools": "2.1.1"
+	},
+	"devDependencies" : {
+		"mocha" : "*"
+	},
+	"scripts": {
+		"test": "mocha test -R spec"
+	}
+}
